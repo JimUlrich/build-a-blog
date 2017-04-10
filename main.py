@@ -17,21 +17,22 @@ class MainHandler(webapp2.RequestHandler):
 class Posts(db.Model):
     title =  db.StringProperty(required = True)
     post = db.TextProperty(required = True)
-    created = created = db.DateTimeProperty(auto_now_add = True)
+    created = db.DateTimeProperty(auto_now_add = True)
 
 
 #create blog page
 class Blog(webapp2.RequestHandler):
+    
 
     def render_page(self, title="", post="", error=""):
-        posts = db.GqlQuery("SELECT * FROM Posts "
+        displayed_posts = db.GqlQuery("SELECT * FROM Posts "
                            "ORDER BY created DESC "
                            "LIMIT 5")
+        #for post in displayed_posts:
+            #post_id = post.key().id()
         t = jinja_env.get_template("blog.html")
-        content = t.render(title=title, post=post, posts=posts)
+        content = t.render(title=title, post=post, posts=displayed_posts)
         self.response.write(content)
-
-class BlogHandler(Blog):
 
     def get(self):
         self.render_page()
@@ -78,7 +79,7 @@ class ViewPostHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/blog', BlogHandler),
+    ('/blog', Blog),
     ('/blog/newpost', NewPost),
     webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
 ], debug=True)
