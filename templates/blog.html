@@ -4,11 +4,16 @@
 <h1>blog@!</h1>
 
 {% for post in posts %}
+
   <div class="post">
-    <div class="post-title">{{post.title}}</div>
-    <pre class="post-body">{{post.post}}</pre>
+    <div class="post-title"><a href=/blog/{{post.id}}>{{post.title}}</a></div>
+    <div class="post-body">{{post.post}}</div>
   </div>
 {% endfor %}
+<hr>
+<form method="post">
+    <input type="submit" value="Create new post"/>
+</form>
 
 
 {% endblock %}
